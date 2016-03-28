@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CC3xxx>
+   <Version>
+      <Platform>CC31xx Simple Link device</Platform>
+      <SoftwareMajor>1</SoftwareMajor>
+      <SoftwareMinor>0</SoftwareMinor>
+      <Software_sub_Minor>0</Software_sub_Minor>
+   </Version>
+   <Filename name="/sys/mcuimg.bin">
+      <MAX>0x0</MAX>
+      <RW>0x0</RW>
+      <RO>0x0</RO>
+   </Filename>
+   <Filename name="www/main.html">
+      <MAX>0x0</MAX>
+      <RW>0x0</RW>
+      <RO>0x0</RO>
+   </Filename>
+   <Filename name="www/led_demo.html">
+      <MAX>0x0</MAX>
+      <RW>0x0</RW>
+      <RO>0x0</RO>
+   </Filename>
+   <Filename name="new file/d937ea10-97b1-4ad1-8943-244bbbeef616">
+      <MAX>0x0</MAX>
+      <RW>0x0</RW>
+      <RO>0x0</RO>
+   </Filename>
+   <Filename name="www/temp.json">
+      <MAX>0x0</MAX>
+      <RW>0x0</RW>
+      <RO>0x0</RO>
+   </Filename>
+   <Filename name="www/setpoint.json">
+      <MAX>0x0</MAX>
+      <RW>0x0</RW>
+      <RO>0x0</RO>
+   </Filename>
+   <Filename name="www/fan.json">
+      <MAX>0x0</MAX>
+      <RW>0x0</RW>
+      <RO>0x0</RO>
+   </Filename>
+   <Filename name="www/all.json">
+      <MAX>0x0</MAX>
+      <RW>0x0</RW>
+      <RO>0x0</RO>
+   </Filename>
+</CC3xxx>
