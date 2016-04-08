@@ -1,7 +1,8 @@
-#Fri Apr 08 14:24:53 EDT 2016
+#Fri Apr 08 14:58:58 EDT 2016
 interface=CC3x Serial(UART) Interface
 CFG_GRP_ID|DHCP_Server=false
 CFG_GRP_ID|Station=false
+com=5
 CFG_GRP_ID|mDNS_Client=false
 CFG_GRP_ID|Device_Role=false
 CFG_GRP_ID|Profiles=false
@@ -11,11 +12,11 @@ CFG_GRP_ID|Profile6=false
 CFG_GRP_ID|Profile5=false
 CFG_GRP_ID|Profile4=false
 CFG_GRP_ID|Profile3=false
-CFG_GRP_ID|Profile2=false
 CFG_GRP_ID|mDNSClient5=false
+CFG_GRP_ID|Profile2=false
 device=SimpleLink Wifi CC3100/CC3200
-CFG_GRP_ID|Profile1=false
 CFG_GRP_ID|mDNSClient4=false
+CFG_GRP_ID|Profile1=false
 CFG_GRP_ID|mDNSClient3=false
 CFG_GRP_ID|mDNSClient2=false
 CFG_GRP_ID|mDNSClient1=false

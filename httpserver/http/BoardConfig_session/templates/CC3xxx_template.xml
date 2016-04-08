@@ -39,7 +39,7 @@
       <Type>blob</Type>
       <Storage>SFLASH</Storage>
       <MaxSize>0</MaxSize>
-      <url>&quot;location on local machine&quot;</url>
+      <url>${sessionDir}/../../Release/httpserver.bin</url>
       <mode>
          <ModeEntry name="Rollback" checked="true"/>
          <ModeEntry name="Secured" checked="false"/>
@@ -49,9 +49,9 @@
          <ModeEntry name="PublicWrite" checked="false"/>
          <ModeEntry name="PublicRead" checked="false"/>
       </mode>
-      <verify>false</verify>
-      <Update>false</Update>
-      <Erase>false</Erase>
+      <verify>true</verify>
+      <Update>true</Update>
+      <Erase>true</Erase>
       <Certificate>&quot;&quot;</Certificate>
       <Signature>&quot;&quot;</Signature>
    </Filename>
@@ -396,7 +396,70 @@
       <Type>blob</Type>
       <Storage>SFLASH</Storage>
       <MaxSize>0</MaxSize>
-      <url>{$session_dir}../all.json</url>
+      <url>${sessionDir}/../all.json</url>
+      <mode>
+         <ModeEntry name="Rollback" checked="false"/>
+         <ModeEntry name="Secured" checked="false"/>
+         <ModeEntry name="NoSignatureTest" checked="false"/>
+         <ModeEntry name="StaticToken" checked="false"/>
+         <ModeEntry name="VendorToken" checked="false"/>
+         <ModeEntry name="PublicWrite" checked="false"/>
+         <ModeEntry name="PublicRead" checked="false"/>
+      </mode>
+      <verify>true</verify>
+      <Update>true</Update>
+      <Erase>true</Erase>
+      <Certificate></Certificate>
+      <Signature></Signature>
+   </Filename>
+   <Filename name="www/coolingSetpoing.json" category="user">
+      <Version>0</Version>
+      <Type>blob</Type>
+      <Storage>SFLASH</Storage>
+      <MaxSize>0</MaxSize>
+      <url>${sessionDir}/../coolingSetpoint.json</url>
+      <mode>
+         <ModeEntry name="Rollback" checked="false"/>
+         <ModeEntry name="Secured" checked="false"/>
+         <ModeEntry name="NoSignatureTest" checked="false"/>
+         <ModeEntry name="StaticToken" checked="false"/>
+         <ModeEntry name="VendorToken" checked="false"/>
+         <ModeEntry name="PublicWrite" checked="false"/>
+         <ModeEntry name="PublicRead" checked="false"/>
+      </mode>
+      <verify>true</verify>
+      <Update>true</Update>
+      <Erase>true</Erase>
+      <Certificate></Certificate>
+      <Signature></Signature>
+   </Filename>
+   <Filename name="www/fanMode.json" category="user">
+      <Version>0</Version>
+      <Type>blob</Type>
+      <Storage>SFLASH</Storage>
+      <MaxSize>0</MaxSize>
+      <url>${sessionDir}/../fanMode.json</url>
+      <mode>
+         <ModeEntry name="Rollback" checked="false"/>
+         <ModeEntry name="Secured" checked="false"/>
+         <ModeEntry name="NoSignatureTest" checked="false"/>
+         <ModeEntry name="StaticToken" checked="false"/>
+         <ModeEntry name="VendorToken" checked="false"/>
+         <ModeEntry name="PublicWrite" checked="false"/>
+         <ModeEntry name="PublicRead" checked="false"/>
+      </mode>
+      <verify>true</verify>
+      <Update>true</Update>
+      <Erase>true</Erase>
+      <Certificate></Certificate>
+      <Signature></Signature>
+   </Filename>
+   <Filename name="www/temperature.json" category="user">
+      <Version>0</Version>
+      <Type>blob</Type>
+      <Storage>SFLASH</Storage>
+      <MaxSize>0</MaxSize>
+      <url>${sessionDir}/../temperature.json</url>
       <mode>
          <ModeEntry name="Rollback" checked="false"/>
          <ModeEntry name="Secured" checked="false"/>
