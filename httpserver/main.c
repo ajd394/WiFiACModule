@@ -79,7 +79,7 @@
 #include "common.h"
 
 #include "smartconfig.h"
-#include "pinmux.h"
+#include "pin_mux_config.h"
 
 
 #define APPLICATION_NAME        "Wifi AC Module"
