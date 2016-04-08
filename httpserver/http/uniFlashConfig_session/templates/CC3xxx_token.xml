@@ -26,22 +26,22 @@
       <RW>0x0</RW>
       <RO>0x0</RO>
    </Filename>
-   <Filename name="www/temp.json">
-      <MAX>0x0</MAX>
-      <RW>0x0</RW>
-      <RO>0x0</RO>
-   </Filename>
-   <Filename name="www/setpoint.json">
-      <MAX>0x0</MAX>
-      <RW>0x0</RW>
-      <RO>0x0</RO>
-   </Filename>
-   <Filename name="www/fan.json">
-      <MAX>0x0</MAX>
-      <RW>0x0</RW>
-      <RO>0x0</RO>
-   </Filename>
    <Filename name="www/all.json">
+      <MAX>0x0</MAX>
+      <RW>0x0</RW>
+      <RO>0x0</RO>
+   </Filename>
+   <Filename name="www/fanMode.json">
+      <MAX>0x0</MAX>
+      <RW>0x0</RW>
+      <RO>0x0</RO>
+   </Filename>
+   <Filename name="www/temperature.json">
+      <MAX>0x0</MAX>
+      <RW>0x0</RW>
+      <RO>0x0</RO>
+   </Filename>
+   <Filename name="www/coolingSetpoint.json">
       <MAX>0x0</MAX>
       <RW>0x0</RW>
       <RO>0x0</RO>
