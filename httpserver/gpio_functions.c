@@ -43,37 +43,25 @@ unsigned char g_ucCOMPRESSORPin,g_ucFAN_LOWPin,g_ucFAN_MEDPin,g_ucFAN_HIGHPin;
 // GPIO Enabling and Configuration - Start
 
 void
-ac_GPIO_Configure(unsigned char ucPins)
+ac_GPIO_Configure()
 {
 
-  if(ucPins & GPIO_COMPRESSOR)
-  {
     GPIO_IF_GetPortNPin(GPIO_COMPRESSOR,
                         &g_uiCOMPRESSORPort,
                         &g_ucCOMPRESSORPin);
-  }
 
-  if(ucPins & GPIO_FAN_LOW)
-  {
     GPIO_IF_GetPortNPin(GPIO_FAN_LOW,
                   &g_uiFAN_LOWPort,
 				  &g_ucFAN_LOWPin);
-  }
 
-  if(ucPins & GPIO_FAN_MED)
-  {
     GPIO_IF_GetPortNPin(GPIO_FAN_MED,
                       &g_uiFAN_MEDPort,
                       &g_ucFAN_MEDPin);
 
-  }
-  if(ucPins & GPIO_FAN_HIGH)
-  {
+
     GPIO_IF_GetPortNPin(GPIO_FAN_HIGH,
                       &g_uiFAN_HIGHPort,
                       &g_ucFAN_HIGHPin);
-
-  }
 
 }
 
@@ -122,15 +110,5 @@ set_GPIO_Low(int pinNumber) {
 		}
 		default:
 			break;
-	}
-}
-
-void
-set_GPIO_State(int pinNumber, int state) {
-	if (state == 0) {
-		writeLowState(pinNumber);
-	}
-	else if (state == 1) {
-		writeHighState(pinNumber);
 	}
 }

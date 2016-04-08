@@ -8,7 +8,7 @@
 #ifndef GPIO_FUNCTIONS_H_
 #define GPIO_FUNCTIONS_H_
 
-extern void ac_GPIO_Configure(unsigned char ucPins);
+extern void ac_GPIO_Configure();
 extern void writeHighState(int pinNumber);
 extern void writeLowState(int pinNumber);
 extern void writeState(int pinNumber, int state);

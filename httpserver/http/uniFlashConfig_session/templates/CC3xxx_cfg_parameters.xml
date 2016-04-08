@@ -2250,28 +2250,25 @@
       <Param type="u" size="4" hidden="true" valtype="Bool">
          <Name>Profile1Disabled</Name>
          <Default>True</Default>
-         <Value>False</Value>
          <Desc>Profile1 status</Desc>
          <Offset>480</Offset>
       </Param>
       <Param type="u" size="4" script="assertDecimalLenRange(0, 255, Profile1Priority)">
          <Name>Profile1Priority</Name>
          <Default></Default>
-         <Value>0</Value>
          <Desc>Profile1 priority [0-255]</Desc>
          <Offset>12</Offset>
       </Param>
       <Param type="sn" size="32" script="assertEqualOrLessLen(32, Profile1SSID)">
          <Name>Profile1SSID</Name>
          <Default></Default>
-         <Value>snrdes</Value>
          <Desc>Profile1 peer SSID in station role or remote device in Peer2Peer role. String up to 32 bytes</Desc>
          <Offset>16</Offset>
       </Param>
       <Param type="u" size="4" hidden="true" script="Profile1SSID.length">
          <Name>Profile1SSIDLen</Name>
          <Default></Default>
-         <Value>6</Value>
+         <Value>0</Value>
          <Desc>Profile1 peer SSID length in station role or remote device length in Peer2Peer role. Number up to 32 bytes</Desc>
          <Offset>64</Offset>
       </Param>
@@ -2290,7 +2287,6 @@
       <Param type="iu" size="1" valtype="ProfileSecurity">
          <Name>Profile1SecurityType</Name>
          <Default></Default>
-         <Value>WPA</Value>
          <Desc>Profile1 security type. Single selection between Open, WEP, WPA, Peer2Peer and Enterprise</Desc>
          <Offset>0</Offset>
       </Param>
@@ -2327,21 +2323,18 @@
       <Param type="iu" size="63" cond="Profile1SecurityType==WPA" script="assertLenRange(8, 63, Profile1WpaKey)">
          <Name>Profile1WpaKey</Name>
          <Default></Default>
-         <Value>snrdessnrdes</Value>
          <Desc>Profile1 WPA passphrase. It is 8-63 bytes long</Desc>
          <Offset>0</Offset>
       </Param>
       <Param type="iu" size="4" hidden="true" cond="Profile1SecurityType==WPA" script="Profile1WpaKey.length">
          <Name>Profile1WpaKeyLen</Name>
          <Default></Default>
-         <Value>12</Value>
          <Desc>Profile1 WPA passphrase length. It is 8-63 bytes long</Desc>
          <Offset>0</Offset>
       </Param>
       <Param type="xb" size="32" hidden="true" cond="Profile1SecurityType==WPA &amp;&amp; Profile1SSIDLen > 0  &amp;&amp; Profile1WpaKeyLen > 0" script="CfgParamEvalUtils.PMKGeneration(Profile1SSID,Profile1WpaKey)">
          <Name>Profile1PMK</Name>
          <Default></Default>
-         <Value>D3788FCD58F7332E3CC6C0B3603D62D26DA59C031E0CF33B2ABA9F891B1AF3ED</Value>
          <Desc>Profile1 WPA PMK. Always 32 bytes long</Desc>
          <Offset>80</Offset>
       </Param>
@@ -2420,77 +2413,66 @@
       <Param type="xl" size="4" hidden="true" cond="!(!Profile1SecurityType)" script="if (Profile1SecurityType==WPA) {1;} else {0;}">
          <Name>Profile1PmkSet</Name>
          <Default>0</Default>
-         <Value>1</Value>
          <Desc>Profile1 PMK set. 0x1 for WPA, 0x0 for others.</Desc>
          <Offset>112</Offset>
       </Param>
       <Param type="xl" size="4" hidden="true" cond="!(!Profile1SecurityType)" script="if (Profile1SecurityType==Open || Profile1SecurityType==WEP || Profile1SecurityType==Peer2Peer) {0;} else if (Profile1SecurityType==WPA || Profile1SecurityType==Enterprise) {18;}">
          <Name>Profile1PairwiseCipher</Name>
          <Default>0</Default>
-         <Value>18</Value>
          <Desc>Profile1 Pairwise cipher suite. Multiple selection between TKIP=0x8 and CCMP=0x10</Desc>
          <Offset>120</Offset>
       </Param>
       <Param type="xl" size="4" hidden="true" cond="!(!Profile1SecurityType)" script="if (Profile1SecurityType==Open || Profile1SecurityType==WEP || Profile1SecurityType==Peer2Peer) {0;} else if (Profile1SecurityType==WPA || Profile1SecurityType==Enterprise) {18;}">
          <Name>Profile1GroupCipher</Name>
          <Default>0</Default>
-         <Value>18</Value>
          <Desc>Profile1 Group cipher suite. Multiple selection between TKIP=0x8 and CCMP=0x10</Desc>
          <Offset>124</Offset>
       </Param>
       <Param type="xl" size="4" hidden="true" cond="!(!Profile1SecurityType)" script="if (Profile1SecurityType==Open || Profile1SecurityType==WEP || Profile1SecurityType==Peer2Peer) {4;} else if (Profile1SecurityType==Enterprise) {1;} else if (Profile1SecurityType==WPA) {2;}">
          <Name>Profile1KeyManagement</Name>
          <Default>4</Default>
-         <Value>2</Value>
          <Desc>Profile1 Key management suite. Multiple selection between 8021X=0x1, PSK=0x2 and NONE=0x4</Desc>
          <Offset>128</Offset>
       </Param>
       <Param type="xl" size="4" hidden="true" cond="!(!Profile1SecurityType)" script="if (Profile1SecurityType==Open || Profile1SecurityType==WEP || Profile1SecurityType==Peer2Peer) {0;} else if (Profile1SecurityType==WPA || Profile1SecurityType==Enterprise) {3;}">
          <Name>Profile1SecProto</Name>
          <Default>0</Default>
-         <Value>3</Value>
          <Desc>Profile1 Security Protocol suite. Multiple selection between WPA=0x1 and RSN=0x2</Desc>
          <Offset>132</Offset>
       </Param>
       <Param type="xl" size="4" hidden="true" cond="!(!Profile1SecurityType)" script="if (Profile1SecurityType==WPA || Profile1SecurityType==Enterprise) {1;} else {0;}">
          <Name>Profile1AuthAlgo</Name>
          <Default>0</Default>
-         <Value>1</Value>
          <Desc>Profile1 authentication algo. 0x1 for WPA and Enterprise, 0x0 for others.</Desc>
          <Offset>136</Offset>
       </Param>
       <Param type="xl" size="4" hidden="true" cond="!(!Profile1SecurityType)" script="if (Profile1SecurityType==Peer2Peer) {0;} else {1;}">
          <Name>Profile1ScanSSID</Name>
          <Default>0</Default>
-         <Value>1</Value>
          <Desc>Profile1 scan SSID with Probe Requests. 0x0 for Peer2Peer, 0x1 for others.</Desc>
          <Offset>140</Offset>
       </Param>
       <Param type="xl" size="4" hidden="true" cond="!(!Profile1SecurityType)" script="if (Profile1SecurityType==Enterprise) {3;} else {0;}">
          <Name>Profile1EapFlags</Name>
          <Default>3</Default>
-         <Value>0</Value>
          <Desc>Profile1 EAPOL flags. 0x3 for Enterprise, 0x0 for others.</Desc>
          <Offset>144</Offset>
       </Param>
       <Param type="u" size="4" hidden="true" cond="!(!Profile1SecurityType)" script="if (Profile1SecurityType==Enterprise) {1398;} else {0;}">
          <Name>Profile1EapFragmentSize</Name>
          <Default>1398</Default>
-         <Value>0</Value>
          <Desc>Profile1 EAP fragment size. 1398 for Enterprise, 0 for others.</Desc>
          <Offset>256</Offset>
       </Param>
       <Param type="d" size="4" hidden="true" cond="!(!Profile1SecurityType)" script="if (Profile1SecurityType==Enterprise) {-1;} else {0;}">
          <Name>Profile1EapWA</Name>
          <Default>-1</Default>
-         <Value>0</Value>
          <Desc>Profile1 EAP workaround. -1 for Enterprise, 0 for others.</Desc>
          <Offset>472</Offset>
       </Param>
       <Param type="u" size="4" hidden="true" cond="!(!Profile1SecurityType)" script="if (Profile1SecurityType==WPA) {1;} else {0;}">
          <Name>Profile1WpaHandshake</Name>
          <Default>1</Default>
-         <Value>1</Value>
          <Desc>Profile1 WPA peer key handshake. 1 for WPA, 0 for others.</Desc>
          <Offset>484</Offset>
       </Param>
@@ -3503,7 +3485,6 @@
       <Param type="u" size="4" hidden="true" valtype="Bool">
          <Name>Profile6Disabled</Name>
          <Default>True</Default>
-         <Value>True</Value>
          <Desc>Profile6 status</Desc>
          <Offset>3120</Offset>
       </Param>
@@ -4100,7 +4081,6 @@
       <Param type="u" size="4" valtype="State">
          <Name>AutoSmartConfig</Name>
          <Default>Enable</Default>
-         <Value>Disable</Value>
          <Desc>Disable or Enable Smart Config upon init</Desc>
          <Offset>100</Offset>
       </Param>

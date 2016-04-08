@@ -87,8 +87,6 @@
 #define AP_SSID_LEN_MAX         (33)
 #define ROLE_INVALID            (-5)
 
-#define TEMP_TEST              "89.1"
-#define FAN_TEST              "Low"
 
 #define OOB_TASK_PRIORITY               (1)
 #define OSI_STACK_SIZE                  (2048)
@@ -124,6 +122,8 @@ int g_iSimplelinkRole = ROLE_INVALID;
 signed int g_uiIpAddress = 0;
 unsigned char g_ucSSID[AP_SSID_LEN_MAX];
 
+//AC Global State
+int acEnable = 0; //set to 1 after startup
 unsigned char fanMode[] = "off";
 float temperature = 80.5;
 float coolingSetpoint = 70.5;
@@ -626,7 +626,6 @@ void SimpleLinkHttpServerCallback(SlHttpServerEvent_t *pSlHttpServerEvent,
           {
         	  unsigned char *ptr = pSlHttpServerEvent->EventData.httpPostData.token_value.data;
 			  strcpy(fanMode,pSlHttpServerEvent->EventData.httpPostData.token_value.data);
-			  UART_PRINT(fanMode);
         	  break;
           }else if(memcmp(pSlHttpServerEvent->EventData.httpPostData.token_name.data, SP_POST_token,
                   strlen((const char *)SP_POST_token)) == 0)
@@ -744,8 +743,8 @@ static long ConfigureSimpleLinkToDefaultState()
     ASSERT_ON_ERROR(lRetVal);
 
     // Remove all profiles
-    //lRetVal = sl_WlanProfileDel(0xFF);
-    //ASSERT_ON_ERROR(lRetVal);
+    lRetVal = sl_WlanProfileDel(0xFF);
+    ASSERT_ON_ERROR(lRetVal);
 
     
 
@@ -1044,7 +1043,10 @@ static void HTTPServerTask(void *pvParameters)
 
     const unsigned char * b = 0;
 
+    //DISABLE access to ROM http pages
     lRetVal =  sl_NetAppSet(SL_NET_APP_HTTP_SERVER_ID, NETAPP_SET_GET_HTTP_OPT_ROM_PAGES_ACCESS, 1 ,b);
+
+    acEnable = 1;
 
     //Handle Async Events
     while(1)
@@ -1052,6 +1054,28 @@ static void HTTPServerTask(void *pvParameters)
          
     }
 }
+
+
+
+static void ACControllerTask(void *pvParameters)
+{
+    while(1)
+    {
+    	if(acEnable){
+			if( coolingSetpoint < temperature){
+				if(!GPIO_IF_LedStatus(MCU_RED_LED_GPIO)){
+					GPIO_IF_LedOn(MCU_RED_LED_GPIO);
+				}
+			}else{
+				if(GPIO_IF_LedStatus(MCU_RED_LED_GPIO)){
+					GPIO_IF_LedOff(MCU_RED_LED_GPIO);
+				}
+			}
+    	}
+    }
+}
+
+
 //*****************************************************************************
 //
 //! Application startup display on UART
@@ -1128,6 +1152,8 @@ void main()
     //Turn Off the LEDs
     GPIO_IF_LedOff(MCU_ALL_LED_IND);
 
+    ac_GPIO_Configure();
+
     //UART Initialization
     MAP_PRCMPeripheralReset(PRCM_UARTA0);
 
@@ -1152,6 +1178,17 @@ void main()
     //
     lRetVal = osi_TaskCreate(HTTPServerTask, (signed char*)"HTTPServerTask",
                          OSI_STACK_SIZE, NULL, OOB_TASK_PRIORITY, NULL );    
+    if(lRetVal < 0)
+    {
+        UART_PRINT("Unable to create task\n\r");
+        LOOP_FOREVER();
+    }
+
+    //
+    // Create AC Controller Task
+    //
+    lRetVal = osi_TaskCreate(ACControllerTask, (signed char*)"ACControllerTask",
+                         OSI_STACK_SIZE, NULL, OOB_TASK_PRIORITY, NULL );
     if(lRetVal < 0)
     {
         UART_PRINT("Unable to create task\n\r");
