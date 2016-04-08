@@ -33,10 +33,10 @@
 unsigned int g_uiCOMPRESSORPort = 0,g_uiFAN_LOWPort = 0,g_uiFAN_MEDPort = 0,g_uiFAN_HIGHPort = 0;
 unsigned char g_ucCOMPRESSORPin,g_ucFAN_LOWPin,g_ucFAN_MEDPin,g_ucFAN_HIGHPin;
 
-#define GPIO_COMPRESSOR 9
-#define GPIO_FAN_LOW 10
-#define GPIO_FAN_MED 11
-#define GPIO_FAN_HIGH 12
+#define GPIO_COMPRESSOR 6
+#define GPIO_FAN_LOW 7
+#define GPIO_FAN_MED 25
+#define GPIO_FAN_HIGH 24
 
 // Local Variables - End
 
