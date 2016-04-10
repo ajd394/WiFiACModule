@@ -36,7 +36,7 @@ unsigned char g_ucCOMPRESSORPin,g_ucFAN_LOWPin,g_ucFAN_MEDPin,g_ucFAN_HIGHPin;
 #define GPIO_COMPRESSOR 6
 #define GPIO_FAN_LOW 7
 #define GPIO_FAN_MED 25
-#define GPIO_FAN_HIGH 24
+#define GPIO_FAN_HIGH 15
 
 // Local Variables - End
 
@@ -65,22 +65,22 @@ ac_GPIO_Configure()
 
 }
 
-void //PIN TYPES: 9 - COMPRESSOR, 10 - FAN_LOW, 11 - FAN_MED, 12 - FAN_HIGH
+void //PIN TYPES: 6 - COMPRESSOR, 7 - FAN_LOW, 25 - FAN_MED, 15 - FAN_HIGH
 set_GPIO_High(int pinNumber) {
 	switch(pinNumber) {
-		case 9:
+		case 6:
 		{
 			GPIO_IF_Set(GPIO_COMPRESSOR, g_uiCOMPRESSORPort, g_ucCOMPRESSORPin, 1); // Turns on compressor
 		}
-		case 10:
+		case 7:
 		{
 			GPIO_IF_Set(GPIO_FAN_LOW, g_uiFAN_LOWPort, g_ucFAN_LOWPin, 1); // Turns on fan low
 		}
-		case 11:
+		case 25:
 		{
 			GPIO_IF_Set(GPIO_FAN_MED, g_uiFAN_MEDPort, g_ucFAN_MEDPin, 1); // Turns on fan med
 		}
-		case 12:
+		case 15:
 		{
 			GPIO_IF_Set(GPIO_FAN_HIGH, g_uiFAN_HIGHPort, g_ucFAN_HIGHPin, 1); // Turns on fan high
 		}
@@ -89,22 +89,22 @@ set_GPIO_High(int pinNumber) {
 	}
 }
 
-void //PIN TYPES: 9 - COMPRESSOR, 10 - FAN_LOW, 11 - FAN_MED, 12 - FAN_HIGH
+void  //PIN TYPES: 6 - COMPRESSOR, 7 - FAN_LOW, 25 - FAN_MED, 15 - FAN_HIGH
 set_GPIO_Low(int pinNumber) {
 	switch(pinNumber) {
-		case 9:
+		case 6:
 		{
 			GPIO_IF_Set(GPIO_COMPRESSOR, g_uiCOMPRESSORPort, g_ucCOMPRESSORPin, 0); // Turns on compressor
 		}
-		case 10:
+		case 7:
 		{
 			GPIO_IF_Set(GPIO_FAN_LOW, g_uiFAN_LOWPort, g_ucFAN_LOWPin, 0); // Turns on fan low
 		}
-		case 11:
+		case 25:
 		{
 			GPIO_IF_Set(GPIO_FAN_MED, g_uiFAN_MEDPort, g_ucFAN_MEDPin, 0); // Turns on fan med
 		}
-		case 12:
+		case 15:
 		{
 			GPIO_IF_Set(GPIO_FAN_HIGH, g_uiFAN_HIGHPort, g_ucFAN_HIGHPin, 0); // Turns on fan high
 		}
@@ -112,3 +112,7 @@ set_GPIO_Low(int pinNumber) {
 			break;
 	}
 }
+
+
+
+
