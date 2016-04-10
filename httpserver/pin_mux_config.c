@@ -36,7 +36,7 @@
 //
 //*****************************************************************************
 
-// This file was automatically generated on 4/9/2016 at 1:46:57 PM
+// This file was automatically generated on 4/10/2016 at 2:58:42 PM
 // by TI PinMux version 
 //
 //*****************************************************************************
@@ -58,7 +58,6 @@ void PinMuxConfig(void)
     // Set unused pins to PIN_MODE_0 with the exception of JTAG pins 16,17,19,20
     //
     PinModeSet(PIN_05, PIN_MODE_0);
-    PinModeSet(PIN_06, PIN_MODE_0);
     PinModeSet(PIN_07, PIN_MODE_0);
     PinModeSet(PIN_08, PIN_MODE_0);
     PinModeSet(PIN_03, PIN_MODE_0);
@@ -66,8 +65,8 @@ void PinMuxConfig(void)
     PinModeSet(PIN_18, PIN_MODE_0);
     PinModeSet(PIN_53, PIN_MODE_0);
     PinModeSet(PIN_50, PIN_MODE_0);
+    PinModeSet(PIN_58, PIN_MODE_0);
     PinModeSet(PIN_59, PIN_MODE_0);
-    PinModeSet(PIN_60, PIN_MODE_0);
     PinModeSet(PIN_63, PIN_MODE_0);
     
     //
@@ -81,9 +80,9 @@ void PinMuxConfig(void)
     PRCMPeripheralClkEnable(PRCM_UARTA0, PRCM_RUN_MODE_CLK);
 
     //
-    // Configure PIN_58 for ADC0 ADC_CH1
+    // Configure PIN_60 for ADC0 ADC_CH3
     //
-    PinTypeADC(PIN_58, PIN_MODE_255);
+    PinTypeADC(PIN_60, PIN_MODE_255);
 
     //
     // Configure PIN_61 for GPIO Output
@@ -116,16 +115,16 @@ void PinMuxConfig(void)
     GPIODirModeSet(GPIOA1_BASE, 0x8, GPIO_DIR_MODE_OUT);
 
     //
+    // Configure PIN_06 for GPIO Input
+    //
+    PinTypeGPIO(PIN_06, PIN_MODE_0, false);
+    GPIODirModeSet(GPIOA1_BASE, 0x80, GPIO_DIR_MODE_IN);
+
+    //
     // Configure PIN_15 for GPIO Input
     //
     PinTypeGPIO(PIN_15, PIN_MODE_0, false);
     GPIODirModeSet(GPIOA2_BASE, 0x40, GPIO_DIR_MODE_IN);
-
-    //
-    // Configure PIN_16 for GPIO Output
-    //
-    PinTypeGPIO(PIN_16, PIN_MODE_0, false);
-    GPIODirModeSet(GPIOA2_BASE, 0x80, GPIO_DIR_MODE_OUT);
 
     //
     // Configure PIN_21 for GPIO Output
