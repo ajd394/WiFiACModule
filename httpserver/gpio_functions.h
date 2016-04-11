@@ -8,11 +8,6 @@
 #ifndef GPIO_FUNCTIONS_H_
 #define GPIO_FUNCTIONS_H_
 
-extern void ac_GPIO_Configure();
-extern void writeHighState(int pinNumber);
-extern void writeLowState(int pinNumber);
-extern void writeState(int pinNumber, int state);
-
 typedef enum
 {
   off,
@@ -20,5 +15,12 @@ typedef enum
   med,
   high
 } Fan_Modes;
+
+extern void ac_GPIO_Configure();
+extern void writeHighState(int pinNumber);
+extern void writeLowState(int pinNumber);
+extern void writeState(int pinNumber, int state);
+extern void change_GPIO_Comp(int status);
+extern void change_GPIO_Fan(Fan_Modes mode);
 
 #endif /* GPIO_FUNCTIONS_H_ */

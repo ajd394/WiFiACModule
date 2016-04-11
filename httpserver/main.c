@@ -123,13 +123,10 @@ signed int g_uiIpAddress = 0;
 unsigned char g_ucSSID[AP_SSID_LEN_MAX];
 
 //AC Global State
-
-
-const char* Fan_Modes_Strs[] = {"Off", "Low", "Med", "High"};
+const char* Fan_Modes_Strs[] = {"off", "low", "med", "high"};
 
 int acEnable = 0; //set to 1 after startup
-unsigned char fanMode[] = "off"; //old
-Fan_Modes fanMode1 = off;
+Fan_Modes fanMode = off;
 float temperature = 80.5;
 float coolingSetpoint = 70.5;
 
@@ -593,8 +590,10 @@ void SimpleLinkHttpServerCallback(SlHttpServerEvent_t *pSlHttpServerEvent,
                     strlen((const char *)FAN_GET_token)) == 0)
           {
 
-        	  strLenVal = strlen(fanMode);
-			  memcpy(ptr, fanMode, strLenVal);
+        	  char str[80];
+			  sprintf(str, "%d", fanMode);
+			  strLenVal = strlen(str);
+			  memcpy(ptr, str, strLenVal);
 			  ptr += strLenVal;
 			  pSlHttpServerResponse->ResponseData.token_value.len += strLenVal;
 
@@ -630,12 +629,14 @@ void SimpleLinkHttpServerCallback(SlHttpServerEvent_t *pSlHttpServerEvent,
                              strlen((const char *)FAN_POST_token)) == 0)
           {
         	  //unsigned char *ptr = pSlHttpServerEvent->EventData.httpPostData.token_value.data;
-			  strcpy(fanMode,pSlHttpServerEvent->EventData.httpPostData.token_value.data);
+			  //strcpy(fanMode,pSlHttpServerEvent->EventData.httpPostData.token_value.data);
+
+        	  fanMode = atoi((const char *) pSlHttpServerEvent->EventData.httpPostData.token_value.data);
         	  break;
           }else if(memcmp(pSlHttpServerEvent->EventData.httpPostData.token_name.data, SP_POST_token,
                   strlen((const char *)SP_POST_token)) == 0)
           {
-        	  coolingSetpoint = atof(pSlHttpServerEvent->EventData.httpPostData.token_value.data);
+        	  coolingSetpoint = atof((const char *) pSlHttpServerEvent->EventData.httpPostData.token_value.data);
         	  break;
           }
         }
@@ -1060,26 +1061,17 @@ static void HTTPServerTask(void *pvParameters)
     }
 }
 
-
-void setFanMode(int t){
-
-
-}
-
 static void ACControllerTask(void *pvParameters)
 {
     while(1)
     {
     	if(acEnable){
 			if( coolingSetpoint < temperature){
-				if(!GPIO_IF_LedStatus(MCU_RED_LED_GPIO)){
-					GPIO_IF_LedOn(MCU_RED_LED_GPIO);
-				}
+				change_GPIO_Comp(1);
 			}else{
-				if(GPIO_IF_LedStatus(MCU_RED_LED_GPIO)){
-					GPIO_IF_LedOff(MCU_RED_LED_GPIO);
-				}
+				change_GPIO_Comp(0);
 			}
+			change_GPIO_Fan(fanMode);
     	}
     }
 }
