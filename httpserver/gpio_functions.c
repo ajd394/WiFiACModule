@@ -38,6 +38,7 @@ unsigned char g_ucCOMPRESSORPin,g_ucFAN_LOWPin,g_ucFAN_MEDPin,g_ucFAN_HIGHPin;
 #define GPIO_FAN_MED 25
 #define GPIO_FAN_HIGH 15
 
+
 // Local Variables - End
 
 // GPIO Enabling and Configuration - Start
@@ -65,54 +66,40 @@ ac_GPIO_Configure()
 
 }
 
-void //PIN TYPES: 6 - COMPRESSOR, 7 - FAN_LOW, 25 - FAN_MED, 15 - FAN_HIGH
-set_GPIO_High(int pinNumber) {
-	switch(pinNumber) {
-		case 6:
-		{
-			GPIO_IF_Set(GPIO_COMPRESSOR, g_uiCOMPRESSORPort, g_ucCOMPRESSORPin, 1); // Turns on compressor
-		}
-		case 7:
-		{
-			GPIO_IF_Set(GPIO_FAN_LOW, g_uiFAN_LOWPort, g_ucFAN_LOWPin, 1); // Turns on fan low
-		}
-		case 25:
-		{
-			GPIO_IF_Set(GPIO_FAN_MED, g_uiFAN_MEDPort, g_ucFAN_MEDPin, 1); // Turns on fan med
-		}
-		case 15:
-		{
-			GPIO_IF_Set(GPIO_FAN_HIGH, g_uiFAN_HIGHPort, g_ucFAN_HIGHPin, 1); // Turns on fan high
-		}
-		default:
-			break;
+
+//TODO compressor safety time lock
+void
+change_GPIO_Comp(int status){
+	if(status){
+		GPIO_IF_Set(GPIO_COMPRESSOR, g_uiCOMPRESSORPort, g_ucCOMPRESSORPin, 1); // Turns on compressor
+	}else{
+		GPIO_IF_Set(GPIO_COMPRESSOR, g_uiCOMPRESSORPort, g_ucCOMPRESSORPin, 0); // Turns on compressor
 	}
 }
 
-void  //PIN TYPES: 6 - COMPRESSOR, 7 - FAN_LOW, 25 - FAN_MED, 15 - FAN_HIGH
-set_GPIO_Low(int pinNumber) {
-	switch(pinNumber) {
-		case 6:
-		{
-			GPIO_IF_Set(GPIO_COMPRESSOR, g_uiCOMPRESSORPort, g_ucCOMPRESSORPin, 0); // Turns on compressor
-		}
-		case 7:
-		{
-			GPIO_IF_Set(GPIO_FAN_LOW, g_uiFAN_LOWPort, g_ucFAN_LOWPin, 0); // Turns on fan low
-		}
-		case 25:
-		{
-			GPIO_IF_Set(GPIO_FAN_MED, g_uiFAN_MEDPort, g_ucFAN_MEDPin, 0); // Turns on fan med
-		}
-		case 15:
-		{
+
+void
+change_GPIO_Fan(Fan_Modes mode){
+	switch(mode){
+		case off:
+			GPIO_IF_Set(GPIO_FAN_LOW, g_uiFAN_LOWPort, g_ucFAN_LOWPin, 0); // Turns off fan low
+			GPIO_IF_Set(GPIO_FAN_MED, g_uiFAN_MEDPort, g_ucFAN_MEDPin, 0); // Turns off fan med
 			GPIO_IF_Set(GPIO_FAN_HIGH, g_uiFAN_HIGHPort, g_ucFAN_HIGHPin, 0); // Turns on fan high
-		}
-		default:
+			break;
+		case low:
+			GPIO_IF_Set(GPIO_FAN_MED, g_uiFAN_MEDPort, g_ucFAN_MEDPin, 0); // Turns off fan med
+			GPIO_IF_Set(GPIO_FAN_HIGH, g_uiFAN_HIGHPort, g_ucFAN_HIGHPin, 0); // Turns on fan high
+			GPIO_IF_Set(GPIO_FAN_LOW, g_uiFAN_LOWPort, g_ucFAN_LOWPin, 1); // Turns off fan low
+			break;
+		case med:
+			GPIO_IF_Set(GPIO_FAN_HIGH, g_uiFAN_HIGHPort, g_ucFAN_HIGHPin, 0); // Turns on fan high
+			GPIO_IF_Set(GPIO_FAN_LOW, g_uiFAN_LOWPort, g_ucFAN_LOWPin, 0); // Turns off fan low
+			GPIO_IF_Set(GPIO_FAN_MED, g_uiFAN_MEDPort, g_ucFAN_MEDPin, 1); // Turns off fan med
+			break;
+		case high:
+			GPIO_IF_Set(GPIO_FAN_LOW, g_uiFAN_LOWPort, g_ucFAN_LOWPin, 0); // Turns off fan low
+			GPIO_IF_Set(GPIO_FAN_MED, g_uiFAN_MEDPort, g_ucFAN_MEDPin, 0); // Turns off fan med
+			GPIO_IF_Set(GPIO_FAN_HIGH, g_uiFAN_HIGHPort, g_ucFAN_HIGHPin, 1); // Turns on fan high
 			break;
 	}
 }
-
-
-
-

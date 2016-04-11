@@ -123,8 +123,13 @@ signed int g_uiIpAddress = 0;
 unsigned char g_ucSSID[AP_SSID_LEN_MAX];
 
 //AC Global State
+
+
+const char* Fan_Modes_Strs[] = {"Off", "Low", "Med", "High"};
+
 int acEnable = 0; //set to 1 after startup
-unsigned char fanMode[] = "off";
+unsigned char fanMode[] = "off"; //old
+Fan_Modes fanMode1 = off;
 float temperature = 80.5;
 float coolingSetpoint = 70.5;
 
@@ -624,7 +629,7 @@ void SimpleLinkHttpServerCallback(SlHttpServerEvent_t *pSlHttpServerEvent,
           if(memcmp(pSlHttpServerEvent->EventData.httpPostData.token_name.data, FAN_POST_token,
                              strlen((const char *)FAN_POST_token)) == 0)
           {
-        	  unsigned char *ptr = pSlHttpServerEvent->EventData.httpPostData.token_value.data;
+        	  //unsigned char *ptr = pSlHttpServerEvent->EventData.httpPostData.token_value.data;
 			  strcpy(fanMode,pSlHttpServerEvent->EventData.httpPostData.token_value.data);
         	  break;
           }else if(memcmp(pSlHttpServerEvent->EventData.httpPostData.token_name.data, SP_POST_token,
@@ -1056,6 +1061,10 @@ static void HTTPServerTask(void *pvParameters)
 }
 
 
+void setFanMode(int t){
+
+
+}
 
 static void ACControllerTask(void *pvParameters)
 {

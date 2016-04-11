@@ -13,4 +13,12 @@ extern void writeHighState(int pinNumber);
 extern void writeLowState(int pinNumber);
 extern void writeState(int pinNumber, int state);
 
+typedef enum
+{
+  off,
+  low,
+  med,
+  high
+} Fan_Modes;
+
 #endif /* GPIO_FUNCTIONS_H_ */
