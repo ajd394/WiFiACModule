@@ -68,6 +68,7 @@
 #include "rom.h"
 #include "rom_map.h"
 #include "prcm.h"
+#include "adc.h"
 
 //Free_rtos/ti-rtos includes
 #include "osi.h"
@@ -93,6 +94,7 @@
 #define SH_GPIO_3                       (3)  /* P58 - Device Mode */
 #define ROLE_INVALID                    (-5)
 #define AUTO_CONNECTION_TIMEOUT_COUNT   (50)   /* 5 Sec */
+
 
 // Application specific status/error codes
 typedef enum{
@@ -749,8 +751,8 @@ static long ConfigureSimpleLinkToDefaultState()
     ASSERT_ON_ERROR(lRetVal);
 
     // Remove all profiles
-    lRetVal = sl_WlanProfileDel(0xFF);
-    ASSERT_ON_ERROR(lRetVal);
+//    lRetVal = sl_WlanProfileDel(0xFF);
+//    ASSERT_ON_ERROR(lRetVal);
 
     
 
@@ -1061,11 +1063,43 @@ static void HTTPServerTask(void *pvParameters)
     }
 }
 
+void SampleTemp(){
+	unsigned int  uiChannel = ADC_CH_3;
+	unsigned long ulSample;
+	//
+	// Enable ADC module
+	//
+	MAP_ADCEnable(ADC_BASE);
+
+	//
+	// Enable ADC channel
+	//
+
+	MAP_ADCChannelEnable(ADC_BASE, uiChannel);
+
+	if(MAP_ADCFIFOLvlGet(ADC_BASE, uiChannel))
+	{
+		ulSample = MAP_ADCFIFORead(ADC_BASE, uiChannel);
+	}
+
+    MAP_ADCChannelDisable(ADC_BASE, uiChannel);
+
+    float volts = (((float)((ulSample >> 2 ) & 0x0FFF))*1.4)/4096;
+    float degC = (volts - 0.5 ) / 0.01;
+    float degF = (degC * 1.8 ) + 32;
+
+    temperature = degF;
+
+}
+
 static void ACControllerTask(void *pvParameters)
 {
     while(1)
     {
     	if(acEnable){
+
+    		SampleTemp();
+
 			if( coolingSetpoint < temperature){
 				change_GPIO_Comp(1);
 			}else{
