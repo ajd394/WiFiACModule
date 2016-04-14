@@ -52,6 +52,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdint.h>
 
 // Simplelink includes
 #include "simplelink.h"
@@ -60,13 +61,16 @@
 //driverlib includes
 #include "hw_ints.h"
 #include "hw_types.h"
+#include "hw_adc.h"
 #include "hw_memmap.h"
+#include "hw_common_reg.h"
+#include "hw_gprcm.h"
+#include "rom.h"
+#include "rom_map.h"
 #include "interrupt.h"
 #include "utils.h"
 #include "pin.h"
 #include "uart.h"
-#include "rom.h"
-#include "rom_map.h"
 #include "prcm.h"
 #include "adc.h"
 
@@ -94,6 +98,8 @@
 #define SH_GPIO_3                       (3)  /* P58 - Device Mode */
 #define ROLE_INVALID                    (-5)
 #define AUTO_CONNECTION_TIMEOUT_COUNT   (50)   /* 5 Sec */
+#define NO_OF_SAMPLES 		1
+
 
 
 // Application specific status/error codes
@@ -1066,6 +1072,7 @@ static void HTTPServerTask(void *pvParameters)
 void SampleTemp(){
 	unsigned int  uiChannel = ADC_CH_3;
 	unsigned long ulSample;
+	unsigned int uiIndex = 0;
 	//
 	// Enable ADC module
 	//
@@ -1077,19 +1084,22 @@ void SampleTemp(){
 
 	MAP_ADCChannelEnable(ADC_BASE, uiChannel);
 
-	if(MAP_ADCFIFOLvlGet(ADC_BASE, uiChannel))
+	while(uiIndex < NO_OF_SAMPLES + 4)
 	{
-		ulSample = MAP_ADCFIFORead(ADC_BASE, uiChannel);
+		if(MAP_ADCFIFOLvlGet(ADC_BASE, uiChannel))
+		{
+			ulSample = MAP_ADCFIFORead(ADC_BASE, uiChannel);
+			uiIndex++;
+		}
 	}
 
     MAP_ADCChannelDisable(ADC_BASE, uiChannel);
 
-    float volts = (((float)((ulSample >> 2 ) & 0x0FFF))*1.4)/4096;
-    float degC = (volts - 0.5 ) / 0.01;
-    float degF = (degC * 1.8 ) + 32;
+//    float databits = (float)((ulSample >> 2 ) & 0x0FFF);
+//    float volts = (databits * 1.4)/4096.0;
+//    float degF = (volts - 0.058)*1000;
 
-    temperature = degF;
-
+    temperature = (float)((((((float)((ulSample >> 2 ) & 0x0FFF))*1.4)/4096)-0.058)*1000);
 }
 
 static void ACControllerTask(void *pvParameters)
