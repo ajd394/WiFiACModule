@@ -636,9 +636,6 @@ void SimpleLinkHttpServerCallback(SlHttpServerEvent_t *pSlHttpServerEvent,
           if(memcmp(pSlHttpServerEvent->EventData.httpPostData.token_name.data, FAN_POST_token,
                              strlen((const char *)FAN_POST_token)) == 0)
           {
-        	  //unsigned char *ptr = pSlHttpServerEvent->EventData.httpPostData.token_value.data;
-			  //strcpy(fanMode,pSlHttpServerEvent->EventData.httpPostData.token_value.data);
-
         	  fanMode = atoi((const char *) pSlHttpServerEvent->EventData.httpPostData.token_value.data);
         	  break;
           }else if(memcmp(pSlHttpServerEvent->EventData.httpPostData.token_name.data, SP_POST_token,
