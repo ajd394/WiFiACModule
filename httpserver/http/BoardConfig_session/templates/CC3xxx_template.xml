@@ -412,7 +412,7 @@
       <Certificate></Certificate>
       <Signature></Signature>
    </Filename>
-   <Filename name="www/coolingSetpoing.json" category="user">
+   <Filename name="www/coolingSetpoint.json" category="user">
       <Version>0</Version>
       <Type>blob</Type>
       <Storage>SFLASH</Storage>
