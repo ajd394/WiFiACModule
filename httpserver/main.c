@@ -135,8 +135,8 @@ const char* Fan_Modes_Strs[] = {"off", "low", "med", "high"};
 
 int acEnable = 0; //set to 1 after startup
 Fan_Modes fanMode = off;
-float temperature = 80.5;
-float coolingSetpoint = 70.5;
+float temperature = 30.0;
+float coolingSetpoint = 80.5;
 
 #if defined(ccs)
 extern void (* const g_pfnVectors[])(void);

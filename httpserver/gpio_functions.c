@@ -35,8 +35,8 @@ unsigned char g_ucCOMPRESSORPin,g_ucFAN_LOWPin,g_ucFAN_MEDPin,g_ucFAN_HIGHPin;
 
 #define GPIO_COMPRESSOR 6
 #define GPIO_FAN_LOW 7
-#define GPIO_FAN_MED 25
-#define GPIO_FAN_HIGH 15
+#define GPIO_FAN_MED 28
+#define GPIO_FAN_HIGH 16
 
 
 // Local Variables - End

@@ -36,7 +36,7 @@
 //
 //*****************************************************************************
 
-// This file was automatically generated on 4/11/2016 at 5:11:06 PM
+// This file was automatically generated on 5/1/2016 at 5:44:14 PM
 // by TI PinMux version 
 //
 //*****************************************************************************
@@ -60,11 +60,11 @@ void PinMuxConfig(void)
     // Set unused pins to PIN_MODE_0 with the exception of JTAG pins 16,17,19,20
     //
     MAP_PinModeSet(PIN_05, PIN_MODE_0);
-    MAP_PinModeSet(PIN_07, PIN_MODE_0);
+    MAP_PinModeSet(PIN_06, PIN_MODE_0);
     MAP_PinModeSet(PIN_08, PIN_MODE_0);
     MAP_PinModeSet(PIN_03, PIN_MODE_0);
     MAP_PinModeSet(PIN_04, PIN_MODE_0);
-    MAP_PinModeSet(PIN_18, PIN_MODE_0);
+    MAP_PinModeSet(PIN_21, PIN_MODE_0);
     MAP_PinModeSet(PIN_53, PIN_MODE_0);
     MAP_PinModeSet(PIN_50, PIN_MODE_0);
     MAP_PinModeSet(PIN_58, PIN_MODE_0);
@@ -117,10 +117,10 @@ void PinMuxConfig(void)
     MAP_GPIODirModeSet(GPIOA1_BASE, 0x8, GPIO_DIR_MODE_OUT);
 
     //
-    // Configure PIN_06 for GPIO Input
+    // Configure PIN_07 for GPIO Output
     //
-    MAP_PinTypeGPIO(PIN_06, PIN_MODE_0, false);
-    MAP_GPIODirModeSet(GPIOA1_BASE, 0x80, GPIO_DIR_MODE_IN);
+    MAP_PinTypeGPIO(PIN_07, PIN_MODE_0, false);
+    MAP_GPIODirModeSet(GPIOA2_BASE, 0x1, GPIO_DIR_MODE_OUT);
 
     //
     // Configure PIN_15 for GPIO Input
@@ -129,10 +129,10 @@ void PinMuxConfig(void)
     MAP_GPIODirModeSet(GPIOA2_BASE, 0x40, GPIO_DIR_MODE_IN);
 
     //
-    // Configure PIN_21 for GPIO Output
+    // Configure PIN_18 for GPIO Output
     //
-    MAP_PinTypeGPIO(PIN_21, PIN_MODE_0, false);
-    MAP_GPIODirModeSet(GPIOA3_BASE, 0x2, GPIO_DIR_MODE_OUT);
+    MAP_PinTypeGPIO(PIN_18, PIN_MODE_0, false);
+    MAP_GPIODirModeSet(GPIOA3_BASE, 0x10, GPIO_DIR_MODE_OUT);
 
     //
     // Configure PIN_55 for UART0 UART0_TX
