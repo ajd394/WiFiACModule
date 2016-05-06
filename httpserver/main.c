@@ -127,6 +127,10 @@ unsigned char FAN_GET_token[] = "__SL_G_UFN";
 unsigned char TEMP_GET_token[] = "__SL_G_UTP";
 unsigned char SP_POST_token[] = "__SL_P_USP";
 unsigned char SP_GET_token[] = "__SL_G_USP";
+
+unsigned char RM_POST_token[] = "__SL_P_URM";
+unsigned char RM_GET_token[] = "__SL_G_URM";
+
 int g_iSimplelinkRole = ROLE_INVALID;
 signed int g_uiIpAddress = 0;
 unsigned char g_ucSSID[AP_SSID_LEN_MAX];
@@ -138,6 +142,7 @@ int acEnable = 0; //set to 1 after startup
 Fan_Modes fanMode = off;
 float temperature = 30.0;
 float coolingSetpoint = 40.0;
+float remoteTemp = -1000.0;
 
 #if defined(ccs)
 extern void (* const g_pfnVectors[])(void);
@@ -625,6 +630,15 @@ void SimpleLinkHttpServerCallback(SlHttpServerEvent_t *pSlHttpServerEvent,
 			  memcpy(ptr, str, strLenVal);
 			  ptr += strLenVal;
 			  pSlHttpServerResponse->ResponseData.token_value.len += strLenVal;
+          }else if(memcmp(pSlHttpServerEvent->EventData.httpTokenName.data, RM_GET_token,
+                  strlen((const char *)RM_GET_token)) == 0)
+          {
+        	  char str[80];
+			  sprintf(str, "%.2f", remoteTemp);
+			  strLenVal = strlen(str);
+			  memcpy(ptr, str, strLenVal);
+			  ptr += strLenVal;
+			  pSlHttpServerResponse->ResponseData.token_value.len += strLenVal;
           }
           *ptr = '\0';
         }
@@ -643,6 +657,11 @@ void SimpleLinkHttpServerCallback(SlHttpServerEvent_t *pSlHttpServerEvent,
                   strlen((const char *)SP_POST_token)) == 0)
           {
         	  coolingSetpoint = atof((const char *) pSlHttpServerEvent->EventData.httpPostData.token_value.data);
+        	  break;
+          }else if(memcmp(pSlHttpServerEvent->EventData.httpPostData.token_name.data, RM_POST_token,
+                  strlen((const char *)RM_POST_token)) == 0)
+          {
+        	  remoteTemp = atof((const char *) pSlHttpServerEvent->EventData.httpPostData.token_value.data);
         	  break;
           }
         }
@@ -1125,15 +1144,19 @@ static void ACControllerTask(void *pvParameters)
 
     		SampleTemp();
 
-    		//UART_PRINT("DIFF TIME: %f",diff_t);
-
-			if( ((coolingSetpoint + 3) < temperature) && fanMode != off ){
-				change_GPIO_Comp(1);
-				//UART_PRINT("Comp on\\n\r");
-			}else if( (coolingSetpoint - 3 ) > temperature){
-				change_GPIO_Comp(0);
-				//UART_PRINT("Comp off\n\r");
-			}
+    		if(remoteTemp != -1000.0){
+    			if( ((coolingSetpoint + 3) < remoteTemp) && fanMode != off ){
+					change_GPIO_Comp(1);
+				}else if( (coolingSetpoint - 3 ) > remoteTemp){
+					change_GPIO_Comp(0);
+				}
+    		}else{
+    			if( ((coolingSetpoint + 3) < temperature) && fanMode != off ){
+					change_GPIO_Comp(1);
+				}else if( (coolingSetpoint - 3 ) > temperature){
+					change_GPIO_Comp(0);
+				}
+    		}
 
 			change_GPIO_Fan(fanMode);
     	}
