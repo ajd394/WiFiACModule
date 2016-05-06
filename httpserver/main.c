@@ -53,6 +53,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdint.h>
+#include <math.h>
+#include <time.h>
 
 // Simplelink includes
 #include "simplelink.h"
@@ -98,7 +100,7 @@
 #define SH_GPIO_3                       (3)  /* P58 - Device Mode */
 #define ROLE_INVALID                    (-5)
 #define AUTO_CONNECTION_TIMEOUT_COUNT   (50)   /* 5 Sec */
-#define NO_OF_SAMPLES 		1
+#define NO_OF_SAMPLES 		30
 
 
 
@@ -136,7 +138,8 @@ const char* Fan_Modes_Strs[] = {"off", "low", "med", "high"};
 int acEnable = 0; //set to 1 after startup
 Fan_Modes fanMode = off;
 float temperature = 30.0;
-float coolingSetpoint = 80.5;
+float coolingSetpoint = 40.0;
+time_t last_off;
 
 #if defined(ccs)
 extern void (* const g_pfnVectors[])(void);
@@ -1070,6 +1073,11 @@ void SampleTemp(){
 	unsigned int  uiChannel = ADC_CH_3;
 	unsigned long ulSample;
 	unsigned int uiIndex = 0;
+	float sum = 0;
+	float sampled_temp;
+	float average;
+	const int discarded_vals = 5;
+
 	//
 	// Enable ADC module
 	//
@@ -1086,17 +1094,29 @@ void SampleTemp(){
 		if(MAP_ADCFIFOLvlGet(ADC_BASE, uiChannel))
 		{
 			ulSample = MAP_ADCFIFORead(ADC_BASE, uiChannel);
+			sampled_temp = (float)((((((float)((ulSample >> 2 ) & 0x0FFF))*1.4)/4096)-0.058)*1000);
+			if(uiIndex >= discarded_vals){//skip first
+				sum += sampled_temp;
+				//UART_PRINT("ind %d, sample: %f\n\r", uiIndex, (sum/(uiIndex+1)), sampled_temp);
+			}
 			uiIndex++;
 		}
 	}
 
-    MAP_ADCChannelDisable(ADC_BASE, uiChannel);
+	MAP_ADCChannelDisable(ADC_BASE, uiChannel);
+
+	//number of ignored samples
+	uiIndex -= discarded_vals;
+
+	average = sum / (uiIndex + 1);
 
 //    float databits = (float)((ulSample >> 2 ) & 0x0FFF);
 //    float volts = (databits * 1.4)/4096.0;
 //    float degF = (volts - 0.058)*1000;
 
-    temperature = (float)((((((float)((ulSample >> 2 ) & 0x0FFF))*1.4)/4096)-0.058)*1000);
+    temperature = roundf(average + 8.0);
+
+    //UART_PRINT("ADJ TEMP: %f\n\r",temperature);
 }
 
 static void ACControllerTask(void *pvParameters)
@@ -1107,11 +1127,19 @@ static void ACControllerTask(void *pvParameters)
 
     		SampleTemp();
 
-			if( coolingSetpoint < temperature){
+    		double diff_t = difftime(time(NULL),last_off);
+
+    		//UART_PRINT("DIFF TIME: %f",diff_t);
+
+			if( ((coolingSetpoint + 3) < temperature) && (diff_t > 180 ) && fanMode != off ){
 				change_GPIO_Comp(1);
-			}else{
+				//UART_PRINT("Comp on\\n\r");
+			}else if( (coolingSetpoint - 3 ) > temperature){
 				change_GPIO_Comp(0);
+				//UART_PRINT("Comp off\n\r");
+				last_off = time(NULL);
 			}
+
 			change_GPIO_Fan(fanMode);
     	}
     }
@@ -1225,6 +1253,8 @@ void main()
         UART_PRINT("Unable to create task\n\r");
         LOOP_FOREVER();
     }
+
+	last_off = time(NULL);
 
     //
     // Create AC Controller Task
