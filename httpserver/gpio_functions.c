@@ -5,6 +5,7 @@
 
 // Standard includes
 #include <stdio.h>
+#include <time.h>
 
 // Driverlib includes
 #include "hw_types.h"
@@ -32,6 +33,8 @@
 
 unsigned int g_uiCOMPRESSORPort = 0,g_uiFAN_LOWPort = 0,g_uiFAN_MEDPort = 0,g_uiFAN_HIGHPort = 0;
 unsigned char g_ucCOMPRESSORPin,g_ucFAN_LOWPin,g_ucFAN_MEDPin,g_ucFAN_HIGHPin;
+time_t last_off;
+
 
 #define GPIO_COMPRESSOR 6
 #define GPIO_FAN_LOW 7
@@ -46,6 +49,7 @@ unsigned char g_ucCOMPRESSORPin,g_ucFAN_LOWPin,g_ucFAN_MEDPin,g_ucFAN_HIGHPin;
 void
 ac_GPIO_Configure()
 {
+	last_off = time(NULL);
 
     GPIO_IF_GetPortNPin(GPIO_COMPRESSOR,
                         &g_uiCOMPRESSORPort,
@@ -71,9 +75,12 @@ ac_GPIO_Configure()
 void
 change_GPIO_Comp(int status){
 	if(status){
-		GPIO_IF_Set(GPIO_COMPRESSOR, g_uiCOMPRESSORPort, g_ucCOMPRESSORPin, 1); // Turns on compressor
+		double diff_t = difftime(time(NULL),last_off);
+		if( diff_t > 180 )
+			GPIO_IF_Set(GPIO_COMPRESSOR, g_uiCOMPRESSORPort, g_ucCOMPRESSORPin, 1); // Turns on compressor
 	}else{
-		GPIO_IF_Set(GPIO_COMPRESSOR, g_uiCOMPRESSORPort, g_ucCOMPRESSORPin, 0); // Turns on compressor
+		GPIO_IF_Set(GPIO_COMPRESSOR, g_uiCOMPRESSORPort, g_ucCOMPRESSORPin, 0); // Turns off compressor
+		last_off = time(NULL);
 	}
 }
 
@@ -85,6 +92,8 @@ change_GPIO_Fan(Fan_Modes mode){
 			GPIO_IF_Set(GPIO_FAN_LOW, g_uiFAN_LOWPort, g_ucFAN_LOWPin, 0); // Turns off fan low
 			GPIO_IF_Set(GPIO_FAN_MED, g_uiFAN_MEDPort, g_ucFAN_MEDPin, 0); // Turns off fan med
 			GPIO_IF_Set(GPIO_FAN_HIGH, g_uiFAN_HIGHPort, g_ucFAN_HIGHPin, 0); // Turns on fan high
+			GPIO_IF_Set(GPIO_COMPRESSOR, g_uiCOMPRESSORPort, g_ucCOMPRESSORPin, 0); // Turns off compressor
+			last_off = time(NULL);
 			break;
 		case low:
 			GPIO_IF_Set(GPIO_FAN_MED, g_uiFAN_MEDPort, g_ucFAN_MEDPin, 0); // Turns off fan med

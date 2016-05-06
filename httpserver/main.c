@@ -54,7 +54,6 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <math.h>
-#include <time.h>
 
 // Simplelink includes
 #include "simplelink.h"
@@ -139,7 +138,6 @@ int acEnable = 0; //set to 1 after startup
 Fan_Modes fanMode = off;
 float temperature = 30.0;
 float coolingSetpoint = 40.0;
-time_t last_off;
 
 #if defined(ccs)
 extern void (* const g_pfnVectors[])(void);
@@ -1127,17 +1125,14 @@ static void ACControllerTask(void *pvParameters)
 
     		SampleTemp();
 
-    		double diff_t = difftime(time(NULL),last_off);
-
     		//UART_PRINT("DIFF TIME: %f",diff_t);
 
-			if( ((coolingSetpoint + 3) < temperature) && (diff_t > 180 ) && fanMode != off ){
+			if( ((coolingSetpoint + 3) < temperature) && fanMode != off ){
 				change_GPIO_Comp(1);
 				//UART_PRINT("Comp on\\n\r");
 			}else if( (coolingSetpoint - 3 ) > temperature){
 				change_GPIO_Comp(0);
 				//UART_PRINT("Comp off\n\r");
-				last_off = time(NULL);
 			}
 
 			change_GPIO_Fan(fanMode);
@@ -1253,8 +1248,6 @@ void main()
         UART_PRINT("Unable to create task\n\r");
         LOOP_FOREVER();
     }
-
-	last_off = time(NULL);
 
     //
     // Create AC Controller Task
